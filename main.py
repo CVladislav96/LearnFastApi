@@ -1,3 +1,9 @@
-import requests
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
 
-print("Проект работает!")
+app = FastAPI()
+
+
+@app.get("/")
+async def root():
+    return FileResponse("index.html")
