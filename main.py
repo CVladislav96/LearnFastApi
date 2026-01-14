@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from schemas import STaskAdd
+from routers.task import router as task_router
+
 
 app = FastAPI(
     title="Task Manager API",
@@ -7,23 +8,4 @@ app = FastAPI(
     version="1.0.0"
 )
 
-tasks = []
-
-
-
-@app.post("/tasks")
-async def add_task(task: STaskAdd):
-    tasks.append(task.model_dump())
-    return {"ok": True, "message": "Задача добавлена"}
-
-
-
-
-
-
-
-
-
-
-
-
+app.include_router(task_router)
