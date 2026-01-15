@@ -1,27 +1,22 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from schemas.task import STask, STaskAdd
+from database import SessionDep
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
-tasks = []
 
 @router.post("", response_model=STask, status_code=status.HTTP_201_CREATED)
-async def create_task(task: STaskAdd):
-    task_dict = task.model_dump()
-    task_id = len(tasks) + 1
-    task_dict["id"] = task_id
-    tasks.append(task_dict)
-    return task_dict
+async def create_task(task: STaskAdd, session: SessionDep):
+    return {"ok": True}
 
 @router.get("", response_model=STask, status_code=status.HTTP_200_OK)
-async def get_task(task_id: int):
-    for task in tasks:
-        if task["id"] == task_id:
-            return task
+async def get_task(task_id: int, session: SessionDep):
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
         detail=f'Task with id {task_id} not found'
     )
+
+    return {"ok": True}
 
 
 
